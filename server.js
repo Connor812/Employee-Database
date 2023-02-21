@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 const mysql = require('mysql2');
 const { viewEmployees, viewRoles, viewDepartments } = require('./helpers/query');
+const addEmployee = require('./helpers/add_employee')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -57,40 +58,56 @@ const questions = [
 
 
 
-function repeat() {
-    inquirer
-        .prompt(questions)
-        .then((response) => {
-            const answer = response.answer
-            if (answer == 'View All Employees') {
-                db.query(viewEmployees, function (err, result) {
-                    console.table(result)
-                    repeat();
-                })
-            } else if (answer == 'Add Employee') {
-                        
-            } else if (answer == 'View All Roles') {
-                db.query(viewRoles, function (err, result) {
-                    console.table(result)
-                    repeat();
-                })
+class Repeat {
+    constructor() {
+    }
+    repeat() {
 
-            } else if (answer == 'View All Departments') {
-                db.query(viewDepartments, function (err, result) {
-                    console.table(result)
-                    repeat();
-                })
+        inquirer
+            .prompt(questions)
+            .then((response) => {
+                const answer = response.answer
+                
+                if (answer !== 'Quit') {
+                if (answer == 'View All Employees') {
+                    db.query(viewEmployees, function (err, result) {
+                        console.log('');
+                        console.table(result);
+                        askAgain.repeat();
+                    })
+                } else if (answer == 'Add Employee') {
+                    addEmployee( function (arg1) {
+                        askAgain.repeat();
+                    });
+                } else if (answer == 'View All Roles') {
+                    db.query(viewRoles, function (err, result) {
+                        console.log('');
+                        console.table(result);
+                        askAgain.repeat();
+                    })
+                } else if (answer == 'Add Role') {
+                    addRole( function (arg1) {
+                        askAgain.repeat();
+                    })
+                }
+                else if (answer == 'View All Departments') {
+                    db.query(viewDepartments, function (err, result) {
+                        console.log('');
+                        console.table(result);
+                        askAgain.repeat();
+                    })
 
-            } else if (answer == 'Quit') {
-                console.log('Thank you for using Employee Manager!')
-                return;
+                } 
+            } else {
+                console.log('Thank you for using Employee Manager!');
             }
-        }); 
+
+            });
+    }
 }
 
-repeat();
-
-
+const askAgain = new Repeat();
+askAgain.repeat();
 
 app.listen(PORT, () =>
     console.log(`Example app listening at http://localhost:${PORT}`)

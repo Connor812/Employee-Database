@@ -17,4 +17,9 @@ INNER JOIN roles ON department.department_id = roles.department_id;`;
 
 const viewDepartments = `SELECT department_id AS Id, name AS Name FROM department;`
 
-module.exports = {viewEmployees, viewRoles, viewDepartments}
+const viewManagers = `SELECT concat(employee.first_name, ' ', employee.last_name) AS Employee, employee.id, roles.role_id
+FROM roles
+INNER JOIN employee ON employee.role_id = roles.role_id
+WHERE is_management = 1;`;
+
+module.exports = { viewEmployees, viewRoles, viewDepartments, viewManagers }
