@@ -5,6 +5,7 @@ const mysql = require('mysql2');
 const { viewEmployees, viewRoles, viewDepartments } = require('./helpers/query');
 const addEmployee = require('./helpers/add_employee');
 const addRole = require('./helpers/add_role');
+const addDepartment = require('./helpers/add_department');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -80,6 +81,10 @@ class Repeat {
                     addEmployee( function (arg1) {
                         askAgain.repeat();
                     });
+                } else if (answer == 'Update Employee Role') {
+                    updateEmployee( function (arg1) {
+                        askAgain.repeat();
+                    })
                 } else if (answer == 'View All Roles') {
                     db.query(viewRoles, function (err, result) {
                         console.log('');
@@ -97,8 +102,11 @@ class Repeat {
                         console.table(result);
                         askAgain.repeat();
                     })
-
-                } 
+                } else if (answer == 'Add Department') {
+                    addDepartment( function (arg1) {
+                        askAgain.repeat();
+                    })
+                }
             } else {
                 console.log('Thank you for using Employee Manager!');
             }

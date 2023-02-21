@@ -29,7 +29,7 @@ function addRole(callback) {
                 let newRole = response;
                 console.log(newRole)
                 db.query('INSERT INTO roles SET ?', newRole, function (err, result) {
-                    console.log(`${'\u001b[32m'}Successfuly added Employee!${'\u001b[0m'}`);
+                    console.log(`${'\u001b[32m'}Successfuly added Role!${'\u001b[0m'}`);
                     callback('Done');
                 });
             })
