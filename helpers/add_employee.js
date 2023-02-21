@@ -14,8 +14,6 @@ const db = mysql.createConnection(
     console.log('Connected to the employee_db.')
 );
 
-
-
 function addEmployee(callback) {
     console.log("add Employee worked")
     db.query(viewManagers, function (err, result) {
@@ -25,6 +23,12 @@ function addEmployee(callback) {
                 name: result[i].Employee
             });
         }
+        managers.push(
+            {
+                value: null,
+                name: 'No Manager'
+            }
+        );
         db.query(viewRoles, function (err, result) {
             for (let x = 0; x < result.length; x++) {
                 roles.push({
