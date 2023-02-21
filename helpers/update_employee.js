@@ -8,7 +8,7 @@ const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'password',
         database: 'employee_db'
     },
     console.log('Connected to the employee_db.')
@@ -17,7 +17,6 @@ const db = mysql.createConnection(
 
 function updateEmployee(callback) {
     db.query(viewEmployeesId, function (err, result) {
-        console.log(result)
         for (let i = 0; i < result.length; i++) {
             employees.push({
                 value: result[i].id,
@@ -35,7 +34,6 @@ function updateEmployee(callback) {
                 .prompt(questions)
                 .then((response) => {
                     let updateRole = response;
-                    console.log(updateRole)
                     db.query(`UPDATE employee SET role_id = ${updateRole.role} WHERE id = ${updateRole.employee}`, updateRole, function (err, result) {
                         console.log(`${'\u001b[32m'}Successfuly added Employee!${'\u001b[0m'}`);
                         callback('Done');

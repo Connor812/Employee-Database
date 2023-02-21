@@ -25,4 +25,17 @@ WHERE is_management = 1;`;
 const viewEmployeesId = `SELECT id, concat(first_name, ' ', last_name) AS Employee
 FROM employee`;
 
-module.exports = { viewEmployees, viewRoles, viewDepartments, viewManagers, viewEmployeesId }
+const viewManagersNoRoles = `SELECT concat(employee.first_name, ' ', employee.last_name) AS Employee, employee.id
+FROM roles
+INNER JOIN employee ON employee.role_id = roles.role_id
+WHERE is_management = 1;`;
+
+const viewEmployeeByDepartment = `SELECT CONCAT(first_name, ' ', last_name) AS 'Employees in `
+
+const viewEmployeeByDepartment2 = `' , roles.title, department.name
+FROM department
+INNER JOIN roles ON roles.department_id = department.department_id
+INNER JOIN employee ON employee.role_id = roles.role_id
+WHERE department.department_id = ?;`
+
+module.exports = { viewEmployees, viewRoles, viewDepartments, viewManagers, viewEmployeesId, viewManagersNoRoles, viewEmployeeByDepartment, viewEmployeeByDepartment2 }

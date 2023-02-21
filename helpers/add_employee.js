@@ -8,14 +8,13 @@ const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'password',
         database: 'employee_db'
     },
     console.log('Connected to the employee_db.')
 );
 
 function addEmployee(callback) {
-    console.log("add Employee worked")
     db.query(viewManagers, function (err, result) {
         for (let i = 0; i < result.length; i++) {
             managers.push({

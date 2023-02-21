@@ -7,16 +7,14 @@ const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'password',
         database: 'employee_db'
     },
     console.log('Connected to the employee_db.')
 );
 
 function addRole(callback) {
-    console.log("add role worked")
     db.query(viewDepartments, function (err, result) {
-        console.log(result)
         for (let i = 0; i < result.length; i++) {
             department.push({
                 value: result[i].Id,
@@ -27,7 +25,6 @@ function addRole(callback) {
             .prompt(questions)
             .then((response) => {
                 let newRole = response;
-                console.log(newRole)
                 db.query('INSERT INTO roles SET ?', newRole, function (err, result) {
                     console.log(`${'\u001b[32m'}Successfuly added Role!${'\u001b[0m'}`);
                     callback('Done');

@@ -8,7 +8,7 @@ FROM department
 INNER JOIN roles ON department.department_id = roles.department_id;
 
 -- Displays all managers
-SELECT concat(employee.first_name, ' ', employee.last_name) AS 'Employee Name', employee.id, roles.role_id
+SELECT concat(employee.first_name, ' ', employee.last_name) AS 'Manager Name', employee.id, roles.role_id
 FROM roles
 INNER JOIN employee ON employee.role_id = roles.role_id
 WHERE is_management = 1;
@@ -29,4 +29,16 @@ JOIN department ON roles.department_id = department.department_id;
 
 -- Display employees and there id's
 SELECT id, concat(first_name, ' ', last_name)
+FROM employee;
+
+-- Displays all employees with specific manager
+SELECT CONCAT(first_name, ' ', last_name) AS employees
 FROM employee
+WHERE manager_id = 13;
+
+-- View Employees by Department
+SELECT CONCAT(first_name, ' ', last_name) AS employee, roles.title, department.name
+FROM department
+INNER JOIN roles ON roles.department_id = department.department_id
+INNER JOIN employee ON employee.role_id = roles.role_id
+WHERE department.department_id = 1
