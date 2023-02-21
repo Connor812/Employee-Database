@@ -3,7 +3,8 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 const mysql = require('mysql2');
 const { viewEmployees, viewRoles, viewDepartments } = require('./helpers/query');
-const addEmployee = require('./helpers/add_employee')
+const addEmployee = require('./helpers/add_employee');
+const addRole = require('./helpers/add_role');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
