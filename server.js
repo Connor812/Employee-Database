@@ -6,6 +6,7 @@ const { viewEmployees, viewRoles, viewDepartments } = require('./helpers/query')
 const addEmployee = require('./helpers/add_employee');
 const addRole = require('./helpers/add_role');
 const addDepartment = require('./helpers/add_department');
+const updateEmployee = require('./helpers/update_employee');
 
 const PORT = process.env.PORT || 3001;
 const app = express();

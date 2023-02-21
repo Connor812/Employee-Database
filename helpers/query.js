@@ -22,4 +22,7 @@ FROM roles
 INNER JOIN employee ON employee.role_id = roles.role_id
 WHERE is_management = 1;`;
 
-module.exports = { viewEmployees, viewRoles, viewDepartments, viewManagers }
+const viewEmployeesId = `SELECT id, concat(first_name, ' ', last_name) AS Employee
+FROM employee`;
+
+module.exports = { viewEmployees, viewRoles, viewDepartments, viewManagers, viewEmployeesId }
