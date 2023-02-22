@@ -18,6 +18,7 @@ const viewByManager = require('./helpers/view_by_manager');
 const viewByDepartment = require('./helpers/view_by_department');
 const Delete = require('./helpers/delete');
 const viewDepartmentTotalSalary = require('./helpers/view_total_salary');
+const { response } = require('express');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -75,35 +76,47 @@ const questions = [
             '\x1b[41mQuit\x1b[0m']
     }];
 
-    db.query('SELECT id, LENGTH(id) FROM employee;', function (err, result) {
-        if (result > 0) {
-            validateEmployee = true;
-        } else {
-            validateEmployee = false;
-        }
-    });
-    db.query('SELECT role_id, LENGTH(role_id) FROM roles;', function (err, result) {
-        if (result > 0) {
+async function validate(arg1, arg2, arg3) {
+
+    arg1 = await db.promise().query('SELECT id, LENGTH(id) FROM employee;')
+        .then((response) => {
+            if (response.length > 0) {
+                validateEmployee = true;
+            } else {
+                validateEmployee = false;
+            }
+            return validateEmployee;
+        })
+
+    arg2 = await db.promise().query('SELECT role_id, LENGTH(role_id) FROM roles;')
+    .then((response) => {
+    if (response.length > 0) {
             validateRole = true;
         } else {
             validateRole = false;
         }
-    });
-    db.query('SELECT department_id, LENGTH(department_id) FROM department;', function (err, result) {
-        if (result > 0) {
+        return validateRole;
+    })
+    arg3 = await db.promise().query('SELECT department_id, LENGTH(department_id) FROM department;')
+    .then((response) => {
+    if (response.length > 0) {
             validateDepartment = true;
         } else {
             validateDepartment = false;
         }
-    });
+        return validateDepartment;
+    })
 
-    
-if (validateEmployee && validateRole && validateDepartment) {
-    const askAgain = new Repeat();
-    askAgain.repeat();
-} else {
-    console.log('ERROR: No employee DATA in the employee_db!');
+    // ----------- Validates that information is in the tables ------------
+
+    if (validateEmployee && validateRole && validateDepartment) {
+        askAgain.repeat();
+    } else {
+        console.log('ERROR: No employee DATA in the employee_db!');
+    }
 }
+
+validate() 
 
 class Repeat {
     constructor() {
@@ -114,11 +127,11 @@ class Repeat {
             .prompt(questions)
             .then((response) => {
                 const answer = response.answer
-
+                console.log(answer)
                 if (answer !== 'Quit') {
-                    if (answer == 'View All Employees') {
+                    if (answer == '\x1b[100mView All Employees\x1b[0m') {
+                        console.log('works')
                         db.query(viewEmployees, function (err, result) {
-                            console.log(result)
                             console.log('');
                             console.table(result);
                             askAgain.repeat();
@@ -127,7 +140,7 @@ class Repeat {
                         addEmployee(function (arg1) {
                             askAgain.repeat();
                         });
-                    } else if (answer == 'Update Employee Role') {
+                    } else if (answer == '\x1b[100mUpdate Employee Role\x1b[0m') {
                         updateEmployee(function (arg1) {
                             askAgain.repeat();
                         })
@@ -135,7 +148,7 @@ class Repeat {
                         updateManager(function (arg1) {
                             askAgain.repeat();
                         })
-                    } else if (answer == 'View Employees by Manager') {
+                    } else if (answer == '\x1b[100mView Employees by Manager\x1b[0m') {
                         viewByManager(function (arg1) {
                             askAgain.repeat();
                         })
@@ -145,7 +158,7 @@ class Repeat {
                             console.table(result);
                             askAgain.repeat();
                         })
-                    } else if (answer == 'Add Role') {
+                    } else if (answer == '\x1b[100mAdd Role\x1b[0m') {
                         addRole(function (arg1) {
                             askAgain.repeat();
                         })
@@ -156,20 +169,20 @@ class Repeat {
                             console.table(result);
                             askAgain.repeat();
                         })
-                    } else if (answer == 'View Employees By Department') {
-                        viewByDepartment( function (arg1) {
+                    } else if (answer == '\x1b[100mView Employees By Department\x1b[0m') {
+                        viewByDepartment(function (arg1) {
                             askAgain.repeat();
                         })
                     } else if (answer == 'View Department Total Budget') {
-                        viewDepartmentTotalSalary( function (arg1) {
+                        viewDepartmentTotalSalary(function (arg1) {
                             askAgain.repeat();
                         })
-                    } else if (answer == 'Add Department') {
-                        addDepartment( function (arg1) {
+                    } else if (answer == '\x1b[100mAdd Department\x1b[0m') {
+                        addDepartment(function (arg1) {
                             askAgain.repeat();
                         })
                     } else if (answer == 'Delete From Database') {
-                        Delete( function (arg1) {
+                        Delete(function (arg1) {
                             askAgain.repeat();
                         })
                     }
@@ -179,6 +192,8 @@ class Repeat {
             });
     };
 };
+
+const askAgain = new Repeat();
 
 app.listen(PORT, () =>
     console.log(`Example app listening at http://localhost:${PORT}`)
