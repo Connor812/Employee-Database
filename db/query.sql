@@ -5,7 +5,7 @@ FROM department;
 -- Displays the roles, with the department name
 SELECT roles.role_id AS Id, roles.title, department.name AS Department, roles.salary
 FROM department
-INNER JOIN roles ON department.department_id = roles.department_id;
+INNER JOIN roles ON  roles.department_id = department.department_id;
 
 -- Displays all managers
 SELECT concat(employee.first_name, ' ', employee.last_name) AS 'Manager Name', employee.id, roles.role_id

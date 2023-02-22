@@ -2,7 +2,7 @@
 
 ## Description 📃
 
-
+This is an Employee Manager application where you can manager all of your employees in one place. You can update preset data in  the preset tables using the pre-set schema.sql file as well as seeds.sql file. Once you have a list of employees you can filter through all the different options like viewing all employees, viewing all roles, viewing all departments and so on. Enjoy a super simple program to manage all your employees!
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ GitHub Repo: [Connor812](https://github.com/Connor812/Employee-Database.git)
 
 ## Usage🔋
 
-
+How to use. You can either view the [how to video]() or follow the instructions here. First you'll have to clone down [my repo](https://github.com/Connor812/Employee-Database.git). Then once your in to root folder EMPLOYEE-DATABASE yo
 
 ## Credits🙏🏻
 
