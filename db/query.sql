@@ -41,4 +41,10 @@ SELECT CONCAT(first_name, ' ', last_name) AS employee, roles.title, department.n
 FROM department
 INNER JOIN roles ON roles.department_id = department.department_id
 INNER JOIN employee ON employee.role_id = roles.role_id
-WHERE department.department_id = 1
+WHERE department.department_id = 1;
+
+-- View Department Salray
+SELECT roles.salary, department.name
+FROM department
+INNER JOIN roles ON roles.department_id = department.department_id
+WHERE roles.department_id = 1

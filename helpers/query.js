@@ -11,6 +11,8 @@ LEFT JOIN employee e2 ON e1.manager_id = e2.id
 JOIN roles ON e1.role_id = roles.role_id
 JOIN department ON roles.department_id = department.department_id;`;
 
+const viewEmployeeId = `SELECT id, CONCAT(first_name, ' ', last_name) AS Employee FROM employee`
+
 const viewRoles = `SELECT roles.role_id AS Id, roles.title, department.name AS Department, roles.salary
 FROM department
 INNER JOIN roles ON department.department_id = roles.department_id;`;
@@ -38,4 +40,20 @@ INNER JOIN roles ON roles.department_id = department.department_id
 INNER JOIN employee ON employee.role_id = roles.role_id
 WHERE department.department_id = ?;`
 
-module.exports = { viewEmployees, viewRoles, viewDepartments, viewManagers, viewEmployeesId, viewManagersNoRoles, viewEmployeeByDepartment, viewEmployeeByDepartment2 }
+const viewTotalSalary = `SELECT roles.salary, department.name
+FROM department
+INNER JOIN roles ON roles.department_id = department.department_id
+WHERE roles.department_id = ?`;
+
+module.exports = {
+    viewEmployees,
+    viewRoles,
+    viewDepartments,
+    viewManagers,
+    viewEmployeesId,
+    viewManagersNoRoles,
+    viewEmployeeByDepartment,
+    viewEmployeeByDepartment2,
+    viewEmployeeId,
+    viewTotalSalary
+}

@@ -3,6 +3,9 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 const mysql = require('mysql2');
 const { viewEmployees, viewRoles, viewDepartments } = require('./helpers/query');
+let validateEmployee;
+let validateRole;
+let validateDepartment;
 
 // ------- Grabbing all helper functions -------
 
@@ -13,6 +16,8 @@ const updateEmployee = require('./helpers/update_employee');
 const updateManager = require('./helpers/update_manager');
 const viewByManager = require('./helpers/view_by_manager');
 const viewByDepartment = require('./helpers/view_by_department');
+const Delete = require('./helpers/delete');
+const viewDepartmentTotalSalary = require('./helpers/view_total_salary');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -55,20 +60,50 @@ const questions = [
         type: 'list',
         message: 'Please select what you would like to do? ',
         name: 'answer',
-        choices: ['View All Employees',
+        choices: ['\x1b[100mView All Employees\x1b[0m',
             'Add Employee',
-            'Update Employee Role',
+            '\x1b[100mUpdate Employee Role\x1b[0m',
             'Update Employee Manager',
-            'View Employees by Manager',
+            '\x1b[100mView Employees by Manager\x1b[0m',
             'View All Roles',
-            'Add Role',
+            '\x1b[100mAdd Role\x1b[0m',
             'View All Departments',
-            'View Employees By Department',
-            'Add Department',
-            'Quit']
+            '\x1b[100mView Employees By Department\x1b[0m',
+            'View Department Total Budget',
+            '\x1b[100mAdd Department\x1b[0m',
+            'Delete From Database',
+            '\x1b[41mQuit\x1b[0m']
     }];
 
+    db.query('SELECT id, LENGTH(id) FROM employee;', function (err, result) {
+        if (result > 0) {
+            validateEmployee = true;
+        } else {
+            validateEmployee = false;
+        }
+    });
+    db.query('SELECT role_id, LENGTH(role_id) FROM roles;', function (err, result) {
+        if (result > 0) {
+            validateRole = true;
+        } else {
+            validateRole = false;
+        }
+    });
+    db.query('SELECT department_id, LENGTH(department_id) FROM department;', function (err, result) {
+        if (result > 0) {
+            validateDepartment = true;
+        } else {
+            validateDepartment = false;
+        }
+    });
 
+    
+if (validateEmployee && validateRole && validateDepartment) {
+    const askAgain = new Repeat();
+    askAgain.repeat();
+} else {
+    console.log('ERROR: No employee DATA in the employee_db!');
+}
 
 class Repeat {
     constructor() {
@@ -83,6 +118,7 @@ class Repeat {
                 if (answer !== 'Quit') {
                     if (answer == 'View All Employees') {
                         db.query(viewEmployees, function (err, result) {
+                            console.log(result)
                             console.log('');
                             console.table(result);
                             askAgain.repeat();
@@ -121,24 +157,28 @@ class Repeat {
                             askAgain.repeat();
                         })
                     } else if (answer == 'View Employees By Department') {
-                        viewByDepartment(function (arg1) {
+                        viewByDepartment( function (arg1) {
+                            askAgain.repeat();
+                        })
+                    } else if (answer == 'View Department Total Budget') {
+                        viewDepartmentTotalSalary( function (arg1) {
                             askAgain.repeat();
                         })
                     } else if (answer == 'Add Department') {
-                        addDepartment(function (arg1) {
+                        addDepartment( function (arg1) {
+                            askAgain.repeat();
+                        })
+                    } else if (answer == 'Delete From Database') {
+                        Delete( function (arg1) {
                             askAgain.repeat();
                         })
                     }
                 } else {
                     console.log('Thank you for using Employee Manager!');
-                }
-
+                };
             });
-    }
-}
-
-const askAgain = new Repeat();
-askAgain.repeat();
+    };
+};
 
 app.listen(PORT, () =>
     console.log(`Example app listening at http://localhost:${PORT}`)
