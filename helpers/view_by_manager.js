@@ -1,19 +1,10 @@
 const inquirer = require("inquirer");
 const mysql = require('mysql2');
+const db = require('../connection/connect');
 const cTable = require('console.table');
 const { viewManagersNoRoles } = require('./query');
 let managers = [];
 let employeeUnder;
-
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'employee_db'
-    },
-    console.log('Connected to the employee_db.')
-);
 
 function viewByManager(callback) {
     db.query(viewManagersNoRoles, function (err, result) {

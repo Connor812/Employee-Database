@@ -1,19 +1,10 @@
 const inquirer = require("inquirer");
 const mysql = require('mysql2');
 const cTable = require('console.table');
+const db = require('../connection/connect');
 const { viewEmployeeByDepartment, viewEmployeeByDepartment2, viewDepartments } = require('./query');
 let departments = [];
 let employeesInDepartment;
-
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'employee_db'
-    },
-    console.log('Connected to the employee_db.')
-);
 
 function viewByDepartment(callback) {
     db.query(viewDepartments, function (err, result) {

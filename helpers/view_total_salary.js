@@ -1,18 +1,9 @@
 const inquirer = require("inquirer");
 const mysql = require('mysql2');
 const cTable = require('console.table');
+const db = require('../connection/connect');
 const { viewTotalSalary, viewDepartments } = require('./query');
 let roleSalarys = [];
-
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'employee_db'
-    },
-    console.log('Connected to the employee_db.')
-);
 
 function viewDepartmentTotalSalary(callback) {
     let total = 0;

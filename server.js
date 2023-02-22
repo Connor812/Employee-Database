@@ -18,7 +18,9 @@ const viewByManager = require('./helpers/view_by_manager');
 const viewByDepartment = require('./helpers/view_by_department');
 const Delete = require('./helpers/delete');
 const viewDepartmentTotalSalary = require('./helpers/view_total_salary');
+const db = require('./connection/connect');
 const { response } = require('express');
+
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -27,15 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'employee_db'
-    },
-    console.log('Connected to the employee_db.')
-);
+
 
 
 console.log(`+----------------------------------------------------------+`);
@@ -87,7 +81,6 @@ async function validate(arg1, arg2, arg3) {
             }
             return validateEmployee;
         })
-
     arg2 = await db.promise().query('SELECT role_id, LENGTH(role_id) FROM roles;')
     .then((response) => {
     if (response.length > 0) {

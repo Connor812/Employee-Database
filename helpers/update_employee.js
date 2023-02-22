@@ -1,19 +1,9 @@
 const inquirer = require("inquirer");
 const mysql = require('mysql2');
+const db = require('../connection/connect');
 const { viewEmployeesId, viewRoles } = require('./query');
 let employees = [];
 let roles = [];
-
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'employee_db'
-    },
-    console.log('Connected to the employee_db.')
-);
-
 
 function updateEmployee(callback) {
     db.query(viewEmployeesId, function (err, result) {
